@@ -1,0 +1,30 @@
+{% extends 'edso_app/base.html' %}
+
+{% block content %}
+<h2 class="text-center">Admin Dashboard</h2>
+<h4>Manage Members and Courses</h4>
+<div class="row">
+    <div class="col-md-6">
+        <h5>Members</h5>
+        <ul>
+            {% for member in members %}
+            <li>{{ member.user.username }} - <a href="{% url 'edit_member' member.id %}">Edit</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <h3>Add New Member</h3>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Add Member</button>
+    </form>
+    <div class="col-md-6">
+        <h5>Courses</h5>
+        <ul>
+            {% for course in courses %}
+            <li>{{ course.name }} - <a href="{% url 'edit_course' course.id %}">Edit</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

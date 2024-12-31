@@ -1,0 +1,9 @@
+{% extends 'edso_app/base.html' %}
+
+{% block content %}
+<h2 class="text-center">Enroll in {{ course.name }}</h2>
+<form method="POST" class="w-50 mx-auto">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success w-100">Enroll Now</button>
+</form>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'edso_app/base.html' %}
+
+{% block content %}
+<h1 class="text-center">Welcome to EDSO Services</h1>
+<p class="text-center">Your one-stop solution for technical courses and services.</p>
+
+<div class="text-center">
+    <h2>Login With</h2>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="loginDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            Select Login Option
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="loginDropdown">
+            <li><a class="dropdown-item" href="{% url 'login' %}">Student</a></li>
+            <li><a class="dropdown-item" href="{% url 'login_member' %}">Member</a></li>
+            <li><a class="dropdown-item" href="{% url 'login_admin' %}">Admin</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
