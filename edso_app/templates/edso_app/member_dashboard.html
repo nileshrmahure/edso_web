@@ -15,8 +15,11 @@
     <div class="col-md-6">
         <h5>Students</h5>
         <ul>
-            {% for member in members %}
-            <li>{{ member.user.username }} - <a href="{% url 'edit_student' member.id %}">Edit</a> | <a href="{% url 'delete_student' member.id %}">Delete</a></li>
+            {% for student in students %}
+            
+            <li>{{ student.username }} - 
+                
+            </li>
             {% endfor %}
         </ul>
     </div>

@@ -97,11 +97,13 @@ def member_dashboard(request):
 
     # Fetch courses for the logged-in member if required
     courses = Course.objects.all()  # You can modify this query if you need to filter courses for the member
+    students = CustomUser.objects.filter(is_staff=False, is_superuser=False)  # You can modify this query if you need to filter courses for the member
+
 
     # Optionally, if you want to display specific information about the logged-in user:
     member = request.user  # Since the user is authenticated and is a member, you can directly use request.user
 
-    return render(request, 'edso_app/member_dashboard.html', {'member': member, 'courses': courses})
+    return render(request, 'edso_app/member_dashboard.html', {'member': member, 'courses': courses, 'students':students})
 
 # Admin Login
 
@@ -141,6 +143,7 @@ def admin_dashboard(request):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])  # Set the password correctly
             user.is_member = True
+            user.is_staff = True
             user.save()  # Save the user
 
             # Optionally, create a Member record if you have a separate model
@@ -156,7 +159,9 @@ def admin_dashboard(request):
 
 
 def edit_member(request, member_id):
+    print("member_id", member_id)
     member = get_object_or_404(CustomUser, id=member_id)  # Retrieve member by ID
+    print(member)
 
     if request.method == 'POST':
         form = MemberForm(request.POST, instance=member)  # Bind the form to the existing member
@@ -168,6 +173,37 @@ def edit_member(request, member_id):
         form = MemberForm(instance=member)  # Pre-populate the form with existing member data
 
     return render(request, 'edso_app/edit_member.html', {'form': form, 'member': member})
+
+@login_required
+def add_course(request):
+    if request.method == 'POST':
+        form = CourseEnrollmentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Course added successfully!')
+            return redirect('add_course')  # Replace with your desired redirect page
+    else:
+        form = CourseEnrollmentForm()
+    return render(request, 'edso_app/add_course.html', {'form': form})
+
+@login_required
+def edit_course(request, course_id):
+    course = get_object_or_404(Course, id=course_id)  # Fetch the course by ID
+
+    if request.method == 'POST':
+        form = CourseEnrollmentForm(request.POST, instance=course)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Course updated successfully!')
+            return redirect('course_list')  # Replace with your desired redirect page
+    else:
+        form = CourseEnrollmentForm(instance=course)
+
+    return render(request, 'edso_app/edit_course.html', {'form': form, 'course': course})
+
+def course_list(request):
+    courses = Course.objects.all()
+    return render(request, 'edso_app/course_list.html', {'courses': courses})
 
 # Logout
 def logout_user(request):
